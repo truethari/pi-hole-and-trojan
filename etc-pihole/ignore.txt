@@ -1,0 +1,10 @@
+# This file exists to ensure the etc-pihole directory is tracked in Git
+# Pi-hole will populate this directory with configuration files when the container starts
+# Files that will be created here include:
+# - pihole-FTL.conf (FTL configuration)
+# - setupVars.conf (Pi-hole setup variables)
+# - custom.list (custom DNS entries)
+# - adlists.list (ad block lists)
+# - whitelist.txt, blacklist.txt, regex.list, etc.
+# 
+# This directory should remain empty in the repository

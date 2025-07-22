@@ -1,0 +1,9 @@
+# This file exists to ensure the etc-dnsmasq.d directory is tracked in Git
+# Pi-hole uses this directory to store custom dnsmasq configuration files
+# Files that may be created here include:
+# - 01-pihole.conf (Pi-hole specific dnsmasq settings)
+# - 02-pihole-dhcp.conf (DHCP settings if enabled)
+# - 05-pihole-custom-cname.conf (custom CNAME records)
+# - Custom .conf files for additional DNS configurations
+# 
+# This directory should remain empty in the repository

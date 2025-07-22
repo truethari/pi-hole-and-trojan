@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: 'UTC'
+      WEBPASSWORD: '${PIHOLE_PASSWORD}'
+      SERVERIP: '${SERVER_IP}'
+      DNS1: '1.1.1.1'
+      DNS2: '1.0.0.1'
+    volumes:
+      - './etc-pihole:/etc/pihole'
+      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      - pihole-network
+
+  trojan:
+    container_name: trojan
+    image: trojangfw/trojan:latest
+    ports:
+      - "443:443/tcp"
+    volumes:
+      - './trojan/config.json:/config/config.json:ro'
+      - './trojan/certs:/certs:ro'
+    dns:
+      - pihole
+      - 1.1.1.1  # Fallback DNS
+    restart: unless-stopped
+    networks:
+      - pihole-network
+    depends_on:
+      - pihole
+
+networks:
+  pihole-network:
+    driver: bridge
