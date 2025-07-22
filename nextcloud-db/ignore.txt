@@ -1,0 +1,12 @@
+# This file exists to ensure the nextcloud-db directory is tracked in Git
+# MariaDB will populate this directory with database files when the container starts
+# Files that will be created here include:
+# - mysql/ (core database system files)
+# - nextcloud/ (Nextcloud database schema and metadata)
+# - ibdata1, ib_logfile* (InnoDB database files)
+# - aria_log* (Aria storage engine files)
+# - Performance schema and information schema files
+# - Database configuration and binlog files
+# 
+# This directory should remain empty in the repository
+# Note: Database contains metadata only - actual files are encrypted in nextcloud-data/
