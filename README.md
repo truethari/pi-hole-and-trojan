@@ -1,6 +1,6 @@
-# Pi-hole + Trojan + Nextcloud Docker Setup
+# Pi-hole + Trojan Docker Setup
 
-This repository contains a Docker Compose setup for running Pi-hole (DNS ad-blocker), Trojan (proxy server), and Nextcloud (encrypted file server) on the same VPS.
+This repository contains a Docker Compose setup for running Pi-hole (DNS ad-blocker) and Trojan (proxy server) on the same VPS.
 
 ## Prerequisites
 
@@ -89,13 +89,6 @@ PIHOLE_PASSWORD=your_secure_pihole_password_here
 # Replace with your VPS public IP address
 SERVER_IP=your_vps_public_ip_here
 
-# Database passwords for Nextcloud
-DB_ROOT_PASSWORD=your_secure_db_root_password_here
-DB_PASSWORD=your_secure_db_password_here
-
-# Nextcloud admin credentials
-NEXTCLOUD_ADMIN_USER=admin
-NEXTCLOUD_ADMIN_PASSWORD=your_secure_nextcloud_password_here
 ```
 
 ### 2. Configure Trojan
@@ -130,37 +123,15 @@ sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem trojan/certs/
 sudo chown $USER:$USER trojan/certs/*
 ```
 
-### 4. Enable Nextcloud Encryption
-
-After starting the services, enable encryption in Nextcloud:
-
-```bash
-# Access Nextcloud container
-docker exec -it nextcloud bash
-
-# Enable encryption app
-php occ app:enable encryption
-
-# Enable encryption
-php occ encryption:enable
-
-# Set master key (recommended for server-side encryption)
-php occ encryption:enable-master-key
-
-# Exit container
-exit
-```
-
-### 5. Start Services
+### 4. Start Services
 
 ```bash
 docker-compose up -d
 ```
 
-### 6. Verify Setup
+### 5. Verify Setup
 
 - Pi-hole web interface: `http://your-vps-ip`
-- Nextcloud web interface: `http://your-vps-ip:8080`
 - Trojan runs on port 443
 
 ## Services
@@ -178,18 +149,8 @@ docker-compose up -d
 - **Certificates**: `trojan/certs/`
 - **DNS**: Uses local Pi-hole for ad-blocking on proxied traffic
 
-### Nextcloud
-- **Web Interface**: Port 8080
-- **Purpose**: Encrypted file storage and sync
-- **Database**: MariaDB for metadata storage
-- **Encryption**: Server-side AES-256 encryption enabled
-- **Data**: Stored in `nextcloud-data/` (encrypted)
-- **DNS**: Uses local Pi-hole for ad-blocking
-
 **Benefits**: 
 - All traffic routed through Trojan will automatically benefit from Pi-hole's ad-blocking without requiring external DNS lookups
-- Files are encrypted server-side, protecting data from VPS provider access
-- Self-hosted alternative to Google Drive/Dropbox with full privacy control
 
 ## Client Configuration
 
@@ -209,21 +170,6 @@ Configure your devices to use your VPS IP as DNS server:
 - **Primary DNS**: your-vps-ip
 - **Secondary DNS**: 1.1.1.1 (or any fallback)
 
-### For Nextcloud
-
-**Web Access:**
-- URL: `http://your-vps-ip:8080`
-- Username: admin (or what you set in NEXTCLOUD_ADMIN_USER)
-- Password: (what you set in NEXTCLOUD_ADMIN_PASSWORD)
-
-**Mobile/Desktop Apps:**
-- Server: `http://your-vps-ip:8080`
-- Enable automatic sync for encrypted backups
-
-**Security Features:**
-- Server-side encryption automatically encrypts all files
-- Enable 2FA in Security settings
-- Use app passwords for mobile/desktop clients
 
 ## Maintenance
 
@@ -237,7 +183,6 @@ docker-compose up -d
 ```bash
 docker-compose logs -f pihole
 docker-compose logs -f trojan
-docker-compose logs -f nextcloud
 ```
 
 ### Stop services:
