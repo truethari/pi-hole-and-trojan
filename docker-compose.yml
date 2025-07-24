@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   pihole:
     container_name: pihole
@@ -21,7 +19,8 @@ services:
       - NET_ADMIN
     restart: unless-stopped
     networks:
-      - pihole-network
+      pihole-network:
+        ipv4_address: 172.20.0.2
 
   trojan:
     container_name: trojan
@@ -32,15 +31,18 @@ services:
       - './trojan/config.json:/config/config.json:ro'
       - './trojan/certs:/certs:ro'
     dns:
-      - pihole
-      - 1.1.1.1  # Fallback DNS
+      - 172.20.0.2  # Pi-hole static IP
+      - 1.1.1.1     # Fallback DNS
     restart: unless-stopped
     networks:
-      - pihole-network
+      pihole-network:
+        ipv4_address: 172.20.0.3
     depends_on:
       - pihole
-
 
 networks:
   pihole-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
